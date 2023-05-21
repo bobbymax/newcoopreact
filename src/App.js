@@ -1,25 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import { Suspense } from "react";
+import "./template/css/main.css";
+import { Route, Routes } from "react-router-dom";
+import ProtectedRoute from "./template/ProtectedRoute";
+import GuardRoute from "./template/GuardRoute";
+import { routes } from "./app/http/routes";
+import GuestRoute from "./template/GuestRoute";
+import Home from "./pages/Home";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Suspense fallback={<p>Loading...</p>}>
+      <Routes>
+        <Route
+          exact
+          path="/"
+          element={
+            <GuestRoute>
+              <Home />
+            </GuestRoute>
+          }
+        />
+        {routes.guest.map((page, i) => (
+          <Route
+            exact
+            key={i}
+            path={page.url}
+            element={<GuardRoute>{page.element}</GuardRoute>}
+          />
+        ))}
+        {routes.protected.map((page, i) => (
+          <Route
+            exact
+            key={i}
+            path={page.url}
+            element={<ProtectedRoute>{page.element}</ProtectedRoute>}
+          />
+        ))}
+      </Routes>
+    </Suspense>
   );
-}
+};
 
 export default App;
