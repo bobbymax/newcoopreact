@@ -72,9 +72,29 @@ const Payments = () => {
     );
   };
 
-  const reversePayment = (payment) => {
-    console.log(payment);
+  const destroyPayment = (payment) => {
+    Alert.flash(
+      "Are you sure?",
+      "warning",
+      "You would not be able to revert this!!"
+    ).then((result) => {
+      if (result.isConfirmed) {
+        try {
+          destroy("batches", payment?.id)
+            .then((res) => {
+              const response = res.data;
+              setPayments(payments.filter((pay) => pay?.id !== payment?.id));
+              Alert.success("Deleted", response.message);
+            })
+            .catch((err) => console.log(err.message));
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    });
+  };
 
+  const reversePayment = (payment) => {
     Alert.flash(
       "Are you sure?",
       "warning",
@@ -117,6 +137,7 @@ const Payments = () => {
           data={payments}
           print={printBatch}
           reverse={reversePayment}
+          destroy={destroyPayment}
         />
       </div>
     </>

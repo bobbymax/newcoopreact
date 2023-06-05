@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Alert from "../../../app/services/alert";
-import { batchRequests, collection } from "../../../app/http/controllers";
-import TableComponent from "../../../template/components/TableComponent";
+import { collection } from "../../../app/http/controllers";
 import PageHeader from "../../../template/includes/PageHeader";
-import CreateSubBudgetHead from "./CreateSubBudgetHead";
-import axios from "axios";
+import TableComponent from "../../../template/components/TableComponent";
+import LiquidateRequest from "./LiquidateRequest";
 
-const SubBudgetHeads = () => {
-  const [subBudgetHeads, setSubBudgetHeads] = useState([]);
-  const [budgetHeads, setBudgetHeads] = useState([]);
-  const [categories, setCategories] = useState([]);
+const Liquidate = () => {
+  const [liquidations, setLiquidations] = useState([]);
   const [show, setShow] = useState(false);
   const [data, setData] = useState(undefined);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -17,51 +14,47 @@ const SubBudgetHeads = () => {
 
   const columns = [
     {
-      field: "code",
-      header: "Code",
-      isSortable: true,
-      currency: false,
-    },
-    {
-      field: "budget_head_name",
-      header: "Head",
-      isSortable: true,
-      currency: false,
-    },
-    {
       field: "name",
-      header: "Name",
+      header: "Member",
       isSortable: true,
-      currency: false,
+    },
+    {
+      field: "loan",
+      header: "Loan Code",
+      isSortable: false,
+    },
+    {
+      field: "code",
+      header: "Request Code",
+      isSortable: false,
     },
     {
       field: "type",
       header: "Type",
       isSortable: false,
-      currency: false,
     },
     {
-      field: "group",
-      header: "Group",
-      isSortable: true,
-      currency: false,
-    },
-    {
-      field: "year",
-      header: "Period",
+      field: "amount",
+      header: "Liquid Amount",
       isSortable: false,
-      currency: false,
+      currency: true,
     },
     {
       field: "approved_amount",
-      header: "Approved",
-      isSortable: true,
+      header: "Loan Amount",
+      isSortable: false,
       approved_currency: true,
+    },
+    {
+      field: "status",
+      header: "Status",
+      isSortable: false,
+      status: true,
     },
   ];
 
-  const manageSubBudgetHead = (sub) => {
-    setData(sub);
+  const manageLiquidation = (liq) => {
+    setData(liq);
     setIsUpdating(true);
     setShow(true);
   };
@@ -73,8 +66,8 @@ const SubBudgetHeads = () => {
 
   const handleSubmit = (response) => {
     if (response?.action === "alter") {
-      setSubBudgetHeads(
-        subBudgetHeads.map((dept) => {
+      setLiquidations(
+        liquidations.map((dept) => {
           if (dept.id === response?.data?.id) {
             return response?.data;
           }
@@ -83,7 +76,7 @@ const SubBudgetHeads = () => {
         })
       );
     } else {
-      setSubBudgetHeads([response?.data, ...subBudgetHeads]);
+      setLiquidations([response?.data, ...liquidations]);
     }
 
     Alert.success(response?.status, response?.message);
@@ -101,18 +94,11 @@ const SubBudgetHeads = () => {
 
   useEffect(() => {
     try {
-      const subsData = collection("subBudgetHeads");
-      const budsData = collection("budgetHeads");
-      const catsData = collection("categories");
-
-      batchRequests([subsData, budsData, catsData])
-        .then(
-          axios.spread((...res) => {
-            setSubBudgetHeads(res[0].data.data);
-            setBudgetHeads(res[1].data.data);
-            setCategories(res[2].data.data);
-          })
-        )
+      collection("liquidations")
+        .then((res) => {
+          const response = res.data.data;
+          setLiquidations(response);
+        })
         .catch((err) => {
           console.log(err.message);
         });
@@ -121,22 +107,20 @@ const SubBudgetHeads = () => {
     }
   }, []);
 
-  // console.log(subBudgetHeads);
-
   return (
     <>
-      <CreateSubBudgetHead
-        title="Add Sub Budget Head"
+      <LiquidateRequest
+        title="Liquidate Loan"
         show={show}
         handleClose={handleClose}
         handleSubmit={handleSubmit}
         isUpdating={isUpdating}
         data={data}
-        dependencies={{ categories, budgetHeads }}
       />
+
       <PageHeader
-        pageName="Sub Budget Heads"
-        text="Create Sub Budget Head"
+        pageName="Liquidations"
+        text="Liquidate Loan"
         handleClick={openModal}
         icon="post_add"
         isLoading={isLoading}
@@ -146,9 +130,9 @@ const SubBudgetHeads = () => {
         <div className="row">
           <TableComponent
             columns={columns}
-            data={subBudgetHeads}
+            data={liquidations}
             manage
-            manageData={manageSubBudgetHead}
+            manageData={manageLiquidation}
             isSearchable
           />
         </div>
@@ -157,4 +141,4 @@ const SubBudgetHeads = () => {
   );
 };
 
-export default SubBudgetHeads;
+export default Liquidate;

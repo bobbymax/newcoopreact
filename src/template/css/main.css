@@ -341,6 +341,31 @@ main {
   gap: 2.48rem;
 }
 
+.notification__links {
+  display: flex;
+  align-items: center;
+  gap: 0.32rem;
+}
+
+.notification__links span {
+  display: block;
+}
+
+.notification__links p {
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.notification__links:hover p,
+.notification__links:hover span {
+  color: var(--color-primary);
+}
+
+.notification__links-active p,
+.notification__links-active span {
+  color: var(--color-primary);
+}
+
 .mobile__logo {
   width: 3.4rem;
   height: 3.4rem;
@@ -1009,4 +1034,326 @@ span.open {
 
 .batch__no__section h3 {
   color: var(--color-white);
+}
+
+.input__div {
+  background-color: var(--color-white);
+  padding: var(---padding-lg);
+  border-radius: var(--border-radius-3);
+  box-shadow: var(--box-shadow);
+}
+
+.top__journal__section p {
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.sections_journals {
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.form__actions {
+  padding: 0.98rem;
+  border: 1px solid var(--color-border);
+}
+
+/* Manage Account Section */
+
+.member__action__section {
+  padding: var(--card-padding);
+  background-color: var(--color-white);
+  box-shadow: var(--box-shadow);
+  border-radius: var(--card-border-radius);
+  border: 1px solid var(--color-border);
+}
+
+.member__action__section button {
+  margin-bottom: 0.88rem;
+}
+
+.member__action__section button:last-child {
+  margin-bottom: 0;
+}
+
+.member__bttn__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.78rem;
+  justify-content: center;
+  width: 100%;
+  padding: 0.48rem 1.32rem;
+  border-radius: var(--border-radius-3);
+  color: var(--color-white);
+}
+
+.member__bttn__actions:disabled {
+  background-color: var(--color-dark-variant);
+}
+
+.member__bttn__actions span {
+  display: block;
+}
+
+.member__bttn__actions p {
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--color-white);
+}
+
+/* Dashboard Styling */
+.insight__cards,
+.table__cards,
+.air__ticket,
+.loan__application__form {
+  padding: var(--card-padding);
+  box-shadow: var(--box-shadow);
+  margin-bottom: 1.54rem;
+}
+
+.card__dark {
+  background-color: var(--color-dark);
+}
+
+.card__warning {
+  background-color: var(--color-info-variant);
+}
+.card__white {
+  background-color: var(--color-white);
+}
+
+.card__text-white {
+  color: var(--color-white);
+}
+
+.card__text-mute {
+  color: var(--color-dark);
+}
+
+.insight__cards span {
+  padding: 0.58rem;
+  border-radius: 50%;
+  font-size: 1.48rem;
+  margin-bottom: 1.46rem;
+}
+
+.span__dark-shade {
+  background-color: #b7bec7;
+}
+
+.span__info-shade {
+  background-color: var(--color-info);
+}
+
+.insight__cards small {
+  display: block;
+  font-size: 0.88rem;
+  letter-spacing: 1.5px;
+  margin-bottom: 0.53rem;
+  text-transform: uppercase;
+}
+
+.recent__transactions {
+  width: 100%;
+}
+
+.recent__transactions tr {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.recent__transactions td {
+  padding: 1.28rem 0;
+}
+
+.beneficiary {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.beneficiary span {
+  padding: 0.3rem;
+  background-color: var(--color-dark);
+  color: var(--color-white);
+  border-radius: 50%;
+}
+
+.air__ticket {
+  border-radius: var(--card-border-radius);
+}
+
+.passenger__bttn__grp {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.passenger__bttn__grp span,
+.group__bttn span {
+  display: block;
+}
+
+.group__bttn {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  padding: 0.48rem;
+  border-radius: 50%;
+}
+
+.group__bttn:hover {
+  background-color: var(--color-primary-variant);
+}
+
+.pass__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--color-dark);
+  padding: 0.56rem 0.88rem;
+  color: var(--color-white);
+  border-radius: var(--border-radius-3);
+}
+
+.details__section {
+  width: 100%;
+}
+
+.details__section td {
+  padding: 0.98rem 0;
+  letter-spacing: 1px;
+}
+
+.details__section td:last-child {
+  float: right;
+  font-weight: 700;
+}
+
+.details__section td:first-child {
+  color: var(--color-primary);
+}
+.import__bttn,
+.input__bttn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.48rem;
+  padding: 0.38rem 1.39rem;
+  color: var(--color-white);
+  border-radius: 2rem;
+  width: 100%;
+}
+
+.account__bttn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.48rem;
+  padding: 0.38rem 1.39rem;
+  color: var(--color-white);
+  border-radius: 2rem;
+}
+
+.profile__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.import_bg_dark {
+  background-color: var(--color-info-variant);
+}
+
+.import_bg_dark:hover {
+  background-color: var(--color-info);
+}
+
+.import_bg_dark:disabled {
+  background-color: var(--color-dark-variant);
+}
+
+.import__bttn p {
+  color: var(--color-white);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.input__bttn {
+  margin-top: 2rem;
+}
+
+.import__bttn span {
+  display: block;
+}
+
+.display__cards {
+  text-align: center;
+  padding: 0.99rem;
+}
+
+.credit__items {
+  text-align: center;
+  margin-bottom: 1.38rem;
+}
+.credit__items h3 {
+  color: var(--color-primary);
+}
+
+.credit__items h1 {
+  font-size: 3.5rem;
+}
+
+.credit__items p {
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+}
+
+.accounts {
+  padding: 0.68rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-1);
+}
+
+.account__bttn p {
+  color: var(--color-white);
+}
+
+.account__bttn:disabled {
+  background-color: var(--color-info-dark);
+}
+
+.make__primary {
+  width: 100%;
+  border-radius: var(--border-radius-3);
+  color: var(--color-white);
+  margin-bottom: 0.58rem;
+  padding: 0.28rem 0;
+}
+
+.make__primary:disabled {
+  background-color: var(--color-info-dark);
+}
+
+.make__primary p {
+  color: var(--color-white);
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+}
+
+.acc_details p,
+.acc_details h3 {
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  color: var(--color-danger-variant);
+  font-weight: 600;
+}
+
+.acc_details h3 {
+  color: var(--color-primary);
+}
+
+.make__primary:last-child {
+  margin-bottom: 0;
 }

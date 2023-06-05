@@ -6,7 +6,12 @@ import {
   TextInput,
 } from "../../../template/components/Inputs";
 import { fetch, store } from "../../../app/http/controllers";
-import { generateUniqueString } from "../../../app/helpers";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
+import {
+  formatSelectOptions,
+  generateUniqueString,
+} from "../../../app/helpers";
 
 const CreateExpenditure = ({
   dependencies = undefined,
@@ -18,7 +23,7 @@ const CreateExpenditure = ({
     loan_id: 0,
     member_id: 0,
     trxRef: "",
-    beneficiary: "",
+    beneficiary: null,
     description: "",
     amount: 0,
     booked_balance: 0,
@@ -31,13 +36,20 @@ const CreateExpenditure = ({
     error: "",
   };
 
+  const animated = makeAnimated();
+
   const [state, setState] = useState(initialState);
   const [subs, setSubs] = useState([]);
+  const [funds, setFunds] = useState([]);
   const [types, setTypes] = useState([]);
   const [categories, setCategories] = useState([]);
   const [methods, setMethods] = useState([]);
   const [payments, setPayments] = useState([]);
+  const [mems, setMems] = useState([]);
+  const [vens, setVens] = useState([]);
   const [loan, setLoan] = useState(null);
+  const [beneficiary, setBeneficiary] = useState(null);
+  const [iterable, setIterable] = useState([]);
 
   const makeExpenditure = (e) => {
     e.preventDefault();
@@ -45,7 +57,8 @@ const CreateExpenditure = ({
     const requests = {
       ...state,
       means: state.method,
-      trxRef: generateUniqueString("LN", 6),
+      trxRef: generateUniqueString("EXP", 5),
+      beneficiary,
     };
 
     try {
@@ -68,8 +81,29 @@ const CreateExpenditure = ({
 
   const closeForm = () => {
     setState(initialState);
+    setBeneficiary(null);
     handleClose();
   };
+
+  useEffect(() => {
+    switch (state.payment_type) {
+      case "third-party":
+        setIterable(vens);
+        break;
+
+      case "staff":
+        setIterable(mems.filter((mem) => mem.id === "staff"));
+        break;
+
+      case "member":
+        setIterable(mems.filter((mem) => mem?.id === "member"));
+        break;
+
+      default:
+        setIterable(mems);
+        break;
+    }
+  }, [state.payment_type]);
 
   useEffect(() => {
     if (state.code?.length >= 10) {
@@ -89,12 +123,12 @@ const CreateExpenditure = ({
         ...state,
         amount: parseFloat(loan?.approved_amount),
         description: loan?.reason,
-        beneficiary: loan?.member,
         loan_id: loan?.id,
         member_id: loan?.member_id,
         sub_budget_head_id: sub?.id,
         booked_balance: parseFloat(sub?.booked_balance),
       });
+      setBeneficiary(mems.filter((mem) => mem?.value === loan?.member_id)[0]);
     }
   }, [loan]);
 
@@ -115,18 +149,41 @@ const CreateExpenditure = ({
       dependencies?.types &&
       dependencies?.categories &&
       dependencies?.methods &&
-      dependencies?.payments
+      dependencies?.payments &&
+      dependencies?.members &&
+      dependencies?.vendors
     ) {
-      const { budgetHeads, types, categories, methods, payments } =
-        dependencies;
+      const {
+        budgetHeads,
+        types,
+        categories,
+        methods,
+        payments,
+        members,
+        vendors,
+      } = dependencies;
 
       setSubs(budgetHeads);
       setTypes(types);
       setCategories(categories);
       setMethods(methods);
       setPayments(payments);
+      setMems(formatSelectOptions(members, "id", "name", "type"));
+      setVens(formatSelectOptions(vendors, "id", "name"));
     }
   }, [dependencies]);
+
+  useEffect(() => {
+    switch (state.type) {
+      case "inflow":
+        setFunds(subs.filter((sub) => sub.group === "inflow"));
+        break;
+
+      default:
+        setFunds(subs.filter((sub) => sub.group === "outflow"));
+        break;
+    }
+  }, [state.type]);
 
   useEffect(() => {
     if (
@@ -280,6 +337,7 @@ const CreateExpenditure = ({
                     sub_budget_head_id: parseInt(e.target.value),
                   })
                 }
+                disabled={state.type === ""}
               >
                 <CustomSelectOptions
                   label="Choose Budget Head"
@@ -287,7 +345,7 @@ const CreateExpenditure = ({
                   disabled
                 />
 
-                {subs.map((sub, i) => (
+                {funds.map((sub, i) => (
                   <CustomSelectOptions
                     label={sub.name}
                     value={sub.id}
@@ -330,7 +388,7 @@ const CreateExpenditure = ({
             </div>
             <div className="col-md-4">
               <TextInput
-                label="Amount"
+                label="New Balance"
                 value={state.new_balance}
                 onChange={(e) =>
                   setState({
@@ -342,14 +400,16 @@ const CreateExpenditure = ({
                 disabled
               />
             </div>
-            <div className="col-md-12">
-              <TextInput
-                label="Beneficiary"
-                value={state.beneficiary}
-                onChange={(e) =>
-                  setState({ ...state, beneficiary: e.target.value })
-                }
-                placeholder="Enter Beneficiary"
+            <div className="col-md-12 mb-4">
+              <p className="label-font">Beneficiary</p>
+              <Select
+                components={animated}
+                options={iterable}
+                placeholder="Select Beneficiary"
+                value={beneficiary}
+                onChange={setBeneficiary}
+                isDisabled={state.payment_type === ""}
+                isSearchable
               />
             </div>
             <div className="col-md-12">

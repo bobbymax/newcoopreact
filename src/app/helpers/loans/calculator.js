@@ -54,7 +54,18 @@ export const getDateComponents = () => {
   };
 };
 
-const getMonths = () => {
+export const getYears = () => {
+  const date = new Date();
+  return [
+    date.getFullYear() - 2,
+    date.getFullYear() - 1,
+    date.getFullYear(),
+    date.getFullYear() + 1,
+    date.getFullYear() + 2,
+  ];
+};
+
+export const getMonths = () => {
   return [
     "January",
     "February",

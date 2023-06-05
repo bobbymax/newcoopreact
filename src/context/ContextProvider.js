@@ -8,6 +8,7 @@ export const ContextProvider = ({ children }) => {
   const user = useSelector((state) => state?.auth?.value?.user);
 
   const [auth, setAuth] = useState(null);
+  const [accounts, setAccounts] = useState([]);
   const [wallet, setWallet] = useState(null);
   const [loans, setLoans] = useState([]);
   const [navigation, setNavigation] = useState([]);
@@ -18,10 +19,11 @@ export const ContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (auth !== null && auth?.attributes !== null) {
-      const { roles, wallet, loans } = auth?.attributes;
+      const { roles, wallet, loans, accounts } = auth?.attributes;
 
       setWallet(wallet);
       setLoans(loans);
+      setAccounts(accounts);
 
       try {
         collection("modules")
@@ -40,7 +42,9 @@ export const ContextProvider = ({ children }) => {
   }, [auth]);
 
   return (
-    <StateContext.Provider value={{ auth, navigation, wallet, loans }}>
+    <StateContext.Provider
+      value={{ auth, navigation, wallet, loans, accounts }}
+    >
       {children}
     </StateContext.Provider>
   );

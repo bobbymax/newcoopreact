@@ -232,12 +232,15 @@ const ViewLoan = () => {
     }
   }, [state, pathname]);
 
+  // console.log(details.approved_amount);
+
   useEffect(() => {
     if (loan !== null && subBudgetHeads?.length > 0) {
       const amount =
         parseFloat(loan?.approved_amount) > 0
           ? parseFloat(loan?.approved_amount)
           : parseFloat(loan?.requested_amount);
+
       setDetails({
         ...details,
         requested_amount: amount,
@@ -257,7 +260,7 @@ const ViewLoan = () => {
         sub_budget_head_code: loan?.sub_budget_head_code,
         totalPayable: parseFloat(loan?.totalPayable),
         user_id: parseInt(loan?.user_id),
-        approved_amount: parseFloat(loan?.approved_amount),
+        approved_amount: parseFloat(loan?.requested_amount),
       });
       setGuarantors(loan?.guarantors);
       setInstallments(loan?.installments);

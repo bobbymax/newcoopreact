@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import PageHeader from "../../../template/includes/PageHeader";
-import { batchRequests, collection } from "../../../app/http/controllers";
+import {
+  batchRequests,
+  collection,
+  destroy,
+} from "../../../app/http/controllers";
 import axios from "axios";
 import {
   expenditureTypes,
@@ -10,10 +14,13 @@ import {
 } from "../../../app/helpers";
 import CreateExpenditure from "./CreateExpenditure";
 import TableComponent from "../../../template/components/TableComponent";
+import Alert from "../../../app/services/alert";
 
 const Expenditures = () => {
   const [expenditures, setExpenditures] = useState([]);
   const [subBudgetHeads, setSubBudgetHeads] = useState([]);
+  const [members, setMembers] = useState([]);
+  const [vendors, setVendors] = useState([]);
   const [show, setShow] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -89,13 +96,32 @@ const Expenditures = () => {
   };
 
   const manageExpenditure = (exp) => {
-    // setShow(true);
-    // setIsLoading(true);
-    console.log("Here");
+    Alert.flash(
+      "Are you sure?",
+      "warning",
+      "You would not be able to revert this!!"
+    ).then((result) => {
+      if (result.isConfirmed) {
+        try {
+          destroy("expenditures", exp?.id)
+            .then((res) => {
+              const response = res.data;
+              setExpenditures(
+                expenditures.filter((pay) => pay?.id !== exp?.id)
+              );
+              Alert.success("Deleted", response.message);
+            })
+            .catch((err) => console.log(err.message));
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    });
   };
 
   const handleSubmit = (response) => {
-    console.log(response);
+    setExpenditures([response?.data, ...expenditures]);
+    Alert.success(response?.status, response?.message);
   };
 
   const closeForm = () => {
@@ -107,12 +133,16 @@ const Expenditures = () => {
     try {
       const expsData = collection("expenditures");
       const subsData = collection("subBudgetHeads");
+      const memsData = collection("members");
+      const vendorsData = collection("organizations");
 
-      batchRequests([expsData, subsData])
+      batchRequests([expsData, subsData, memsData, vendorsData])
         .then(
           axios.spread((...res) => {
             setExpenditures(res[0].data.data);
             setSubBudgetHeads(res[1].data.data);
+            setMembers(res[2].data.data);
+            setVendors(res[3].data.data);
           })
         )
         .catch((err) => console.log(err.message));
@@ -141,6 +171,8 @@ const Expenditures = () => {
             categories: expenditureCategories,
             methods: expenditureMethods,
             payments: paymentTypes,
+            members,
+            vendors,
           }}
           handleSubmit={handleSubmit}
           handleClose={closeForm}
@@ -150,9 +182,8 @@ const Expenditures = () => {
           <TableComponent
             columns={columns}
             data={expenditures}
-            manageData={manageExpenditure}
+            destroy={manageExpenditure}
             isSearchable
-            manage
           />
         </div>
       )}

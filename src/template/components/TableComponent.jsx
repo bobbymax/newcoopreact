@@ -19,6 +19,9 @@ const TableComponent = ({
   isSearchable = false,
   manage = false,
   guarantors = false,
+  destroy = undefined,
+  postPayment = undefined,
+  deposit = undefined,
 }) => {
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -32,6 +35,18 @@ const TableComponent = ({
         onClick={() => manageData(raw)}
       >
         <span className="material-icons-sharp">settings</span>
+      </button>
+    );
+  };
+
+  const postPaymentTemplate = (raw) => {
+    return (
+      <button
+        type="button"
+        className="table__action__btn bg__primary"
+        onClick={() => postPayment(raw)}
+      >
+        <span className="material-icons-sharp">post_add</span>
       </button>
     );
   };
@@ -61,17 +76,68 @@ const TableComponent = ({
     );
   };
 
+  const destroyBodyTemplate = (raw) => {
+    return (
+      <button
+        type="button"
+        className="table__print__btn bg__danger"
+        onClick={() => destroy(raw)}
+      >
+        <span className="material-icons-sharp">delete</span>
+      </button>
+    );
+  };
+
+  const checkVerification = (raw) => {
+    for (const property in raw) {
+      if (property === "updated_at") {
+        return raw["status"] !== "verified" ? (
+          <p className="text-danger">Not Verified</p>
+        ) : (
+          moment(raw[property]).format("LL")
+        );
+      }
+    }
+  };
+
   const dateBodyTemplate = (raw) => {
     for (const property in raw) {
       if (
         property === "created_at" ||
         property === "updated_at" ||
+        property === "post_date" ||
         property === "due_date" ||
         property === "paid_at"
       ) {
         return moment(raw[property]).format("LL");
       }
     }
+  };
+
+  const approveBodyTemplate = (raw) => {
+    return (
+      <button
+        type="button"
+        className="table__print__btn bg__primary"
+        onClick={() => deposit(raw, "verified")}
+        disabled={raw?.status !== "pending"}
+      >
+        <span className="material-icons-sharp">done</span>
+      </button>
+    );
+  };
+
+  const declinedBodyTemplate = (raw) => {
+    return (
+      <button
+        type="button"
+        className="table__print__btn bg__danger"
+        onClick={() => deposit(raw, "failed")}
+        disabled={raw?.status !== "pending"}
+      >
+        <span className="material-icons-sharp">do_not_disturb_on</span>
+      </button>
+    );
   };
 
   const actionGuarantorsTemplate = (raw) => {
@@ -110,6 +176,7 @@ const TableComponent = ({
     for (const property in raw) {
       if (
         property === "fee" ||
+        property === "contribution_fee" ||
         property === "booked_expenditure" ||
         property === "requested_amount" ||
         property === "amount"
@@ -145,15 +212,15 @@ const TableComponent = ({
         status = "stat_warning";
         break;
 
-      case "registered":
+      case "registered" || "completed":
         status = "stat_secondary";
         break;
 
-      case "approved":
+      case "approved" || "verified" || "awarded":
         status = "stat_primary";
         break;
 
-      case "denied":
+      case "denied" || "incomplete":
         status = "stat_danger";
         break;
 
@@ -258,6 +325,16 @@ const TableComponent = ({
                   body={dateBodyTemplate}
                 />
               );
+            } else if (col?.verified) {
+              return (
+                <Column
+                  key={i}
+                  field={col.field}
+                  header={col.header}
+                  sortable={col.isSortable}
+                  body={checkVerification}
+                />
+              );
             } else {
               return (
                 <Column
@@ -274,6 +351,10 @@ const TableComponent = ({
           {viewData && <Column body={viewDataTemplate} />}
           {print !== undefined && <Column body={printBodyTemplate} />}
           {reverse !== undefined && <Column body={reverseBodyTemplate} />}
+          {destroy !== undefined && <Column body={destroyBodyTemplate} />}
+          {postPayment !== undefined && <Column body={postPaymentTemplate} />}
+          {deposit !== undefined && <Column body={approveBodyTemplate} />}
+          {deposit !== undefined && <Column body={declinedBodyTemplate} />}
         </DataTable>
       </div>
     </div>

@@ -9,6 +9,7 @@ export const currency = (fig, label = false) => {
   let currency = Intl.NumberFormat("en-US");
   return `${label ? "" : "NGN "}${currency.format(fig)}`;
 };
+
 export const getChildren = (mods, modId) => {
   return mods?.filter((mod) => mod?.parentId === modId);
 };
@@ -68,6 +69,24 @@ export const between = (val, min, max) => {
 };
 
 export const EXTS = ["xlsx", "xls", "csv"];
+
+export const banks = [
+  "Zenith Bank",
+  "FCMD",
+  "Guaranteed Trust Bank",
+  "Stanbic IBTC",
+  "UBA",
+  "Polaris Bank",
+  "Access Bank",
+  "OPay",
+  "PalmPay",
+  "Moniepoint",
+  "Firstbank",
+  "Ecobank",
+  "Wema Bank",
+  "Fidelity Bank",
+  "Keystone Bank",
+];
 
 export const ImportTypes = [
   {
@@ -247,3 +266,45 @@ export const batchRules = [
     default: false,
   },
 ];
+
+export const formatCompactNumber = (number) => {
+  if (number < 1000) {
+    return number;
+  } else if (number >= 1000 && number < 1_000_000) {
+    return (number / 1000).toFixed(1) + "K";
+  } else if (number >= 1_000_000 && number < 1_000_000_000) {
+    return (number / 1_000_000).toFixed(1) + "M";
+  } else if (number >= 1_000_000_000 && number < 1_000_000_000_000) {
+    return (number / 1_000_000_000).toFixed(1) + "B";
+  } else if (number >= 1_000_000_000_000 && number < 1_000_000_000_000_000) {
+    return (number / 1_000_000_000_000).toFixed(1) + "T";
+  }
+};
+
+export const locations = [
+  "Lagos",
+  "Abuja FCT",
+  "Port Harcourt City (PHC)",
+  "Owerri",
+  "Ibadan",
+  "Benin",
+  "Calabar",
+  "Uyo",
+  "Kano",
+  "Kaduna",
+  "Oyo",
+  "Ogun",
+  "Anambra",
+  "Enugu",
+  "Sokoto",
+  "Warri",
+  "Jos",
+  "Yenagoa",
+];
+
+export const range = (start, stop, step) => {
+  return Array.from(
+    { length: (stop - start) / step + 1 },
+    (value, index) => start + index * step
+  );
+};

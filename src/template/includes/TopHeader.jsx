@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import mobileLogo from "../assets/images/logo/logo-small.png";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const TopHeader = ({ handleLogout }) => {
+  const { pathname } = useLocation();
+  const [url, setUrl] = useState("");
+
+  useEffect(() => {
+    setUrl(pathname);
+  }, [pathname]);
+
   return (
     <div className="top__header">
       <div className="mobile__tabs">
@@ -19,13 +26,29 @@ const TopHeader = ({ handleLogout }) => {
       <div className="quick__links"></div>
       <div className="notifications__section">
         <div className="notifications">
-          <Link to="#" className="notification__links">
+          <Link
+            to="/stakeholders/member/messages"
+            className={`notification__links ${
+              url === "/stakeholders/member/messages"
+                ? "notification__links-active"
+                : ""
+            }`}
+          >
             <span className="material-icons-sharp">forum</span>
+            <p>Messages</p>
           </Link>
         </div>
         <div className="user__profile">
-          <Link to="#" className="notification__links">
+          <Link
+            to="/stakeholders/member/profile"
+            className={`notification__links ${
+              url === "/stakeholders/member/profile"
+                ? "notification__links-active"
+                : ""
+            }`}
+          >
             <span className="material-icons-sharp">manage_accounts</span>
+            <p>Profile</p>
           </Link>
         </div>
         <div className="logout">

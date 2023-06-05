@@ -27,7 +27,7 @@ const Import = () => {
       data,
     };
 
-    console.log(body);
+    // console.log(body);
 
     try {
       bulk("imports", body)
