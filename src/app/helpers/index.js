@@ -308,3 +308,37 @@ export const range = (start, stop, step) => {
     (value, index) => start + index * step
   );
 };
+
+export const inputTypes = [
+  { key: "text", label: "Text" },
+  { key: "textarea", label: "Textarea" },
+  { key: "select", label: "Select" },
+  { key: "file", label: "File" },
+  { key: "number", label: "Number" },
+  { key: "password", label: "Password" },
+  { key: "email", label: "Email" },
+  { key: "checkbox", label: "Checkbox" },
+  { key: "radio", label: "Radio" },
+];
+
+export const groups = [
+  { key: "site", label: "Site" },
+  { key: "admin", label: "Admin" },
+];
+
+export const splitDetails = (txt) => {
+  const arrs = txt.split(",");
+  const options = [];
+
+  arrs.forEach((el) => {
+    const inner = el.split(":");
+    const list = {
+      key: inner[0],
+      label: inner[1],
+    };
+
+    options.push(list);
+  });
+
+  return options;
+};

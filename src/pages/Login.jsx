@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, TextInput } from "../template/components/Inputs";
 import { authenticate } from "../features/userSlice";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +9,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [ipAddress, setIpAddress] = useState("");
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -20,9 +21,8 @@ const Login = () => {
     const data = {
       email,
       password,
+      device: ipAddress,
     };
-
-    // console.log(data);
 
     try {
       login(data)
@@ -44,6 +44,17 @@ const Login = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    try {
+      fetch("https://geolocation-db.com/json/")
+        .then((response) => response.json())
+        .then((data) => {
+          setIpAddress(data.IPv4);
+        })
+        .catch((err) => console.log(err));
+    } catch (error) {}
+  }, []);
 
   return (
     <form onSubmit={handleSubmit}>

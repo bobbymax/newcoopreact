@@ -79,16 +79,43 @@ body {
 }
 
 .guard__wrapper {
-  background-color: var(--color-darker);
+  background-color: var(--color-border);
+  background-image: url("../assets/images/bg.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
   height: 100vh;
   margin: 0 auto;
+  position: relative;
 }
 
 .authentication__container {
-  width: 55%;
-  max-width: 85%;
-  height: 100vh;
+  width: 30%;
+  max-width: 95%;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  background-color: var(--color-white);
+  padding: var(--card-padding);
+  border-radius: var(--card-border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.brand {
   margin: 0 auto;
+  width: 40%;
+  padding-bottom: 2.5rem;
+}
+
+.badge__area {
+  padding: var(--card-padding);
+  background-color: var(--color-border);
+  margin-bottom: 1.78rem;
+  border-left: 3px solid var(--color-primary);
+  border-radius: var(--border-radius-1);
 }
 
 a {
@@ -1110,6 +1137,22 @@ span.open {
   padding: var(--card-padding);
   box-shadow: var(--box-shadow);
   margin-bottom: 1.54rem;
+  border-radius: var(--card-border-radius);
+}
+
+.table__cards {
+    border-left: 3px solid var(--color-primary);
+    border-right: 1px solid var(--color-border);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    border-radius: 10px;
+}
+
+.payment_type {
+    color: var(--color-secondary-variant);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.78rem;
 }
 
 .card__dark {
@@ -1164,6 +1207,10 @@ span.open {
 
 .recent__transactions td {
   padding: 1.28rem 0;
+}
+
+.recent__transactions tr:last-child {
+  border-bottom: none;
 }
 
 .beneficiary {
@@ -1356,4 +1403,46 @@ span.open {
 
 .make__primary:last-child {
   margin-bottom: 0;
+}
+
+.request_item {
+  background-color: var(--color-white);
+  padding: var(--card-padding);
+  border-radius: var(--card-border-radius);
+  box-shadow: var(--box-shadow);
+  margin-bottom: 0.88rem;
+}
+
+.request_item small, .request_item p {
+  display: block;
+  letter-spacing: 2px;
+  color: var(--color-info-variant);
+}
+
+.request_item p {
+  margin-top: 0.68rem;
+  text-transform: uppercase;
+}
+
+.date__format {
+  margin-top: 0.32rem;
+  text-transform: uppercase;
+}
+
+.export__bttn {
+  display: block;
+  background-color: var(--color-primary);
+  padding: 0.78rem 1.32rem;
+  text-align: center;
+  margin-bottom: 0.98rem;
+  color: var(--color-white);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.78rem;
+  border-radius: var(--card-border-radius);
+}
+
+.export__bttn:hover {
+  color: var(--color-white);
+  background-color: var(--color-primary-variant);
 }

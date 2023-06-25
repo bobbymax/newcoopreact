@@ -13,6 +13,7 @@ import {
   batchRequests,
   collection,
   fetch,
+  store,
 } from "../../../app/http/controllers";
 import axios from "axios";
 import Alert from "../../../app/services/alert";
@@ -49,7 +50,22 @@ const CreditMembers = () => {
       data,
     };
 
-    console.log(requests);
+    // console.log(requests);
+
+    try {
+      store("credit/members", requests)
+        .then((res) => {
+          const response = res.data;
+
+          Alert.success("Credited!!", response.message);
+          resetComponent();
+        })
+        .catch((err) => {
+          Alert.error("Oops!!", err.response.data.message);
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const resetComponent = () => {

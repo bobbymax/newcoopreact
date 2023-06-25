@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import PageHeader from "../../../template/includes/PageHeader";
@@ -179,6 +180,14 @@ const AddOrUpdateMember = () => {
                 >
                   <span className="material-icons-sharp">add_box</span>
                   <p>Add Role to Member</p>
+                </button>
+                <button
+                  type="button"
+                  className="member__bttn__actions bg__danger"
+                  onClick={() => setShowRole(true)}
+                >
+                  <span className="material-icons-sharp">refresh</span>
+                  <p>Reset Password</p>
                 </button>
               </div>
             </div>

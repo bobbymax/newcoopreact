@@ -99,6 +99,12 @@ const Notifications = lazy(() =>
 const Liquidate = lazy(() =>
   import("../../pages/stakeholders/liquidations/Liquidate")
 );
+const LiquidateLoan = lazy(() => import("../../pages/secretariat/liquidations/LiquidateLoan"))
+
+const Liquidations = lazy(() => import("../../pages/secretariat/liquidations/Liquidations"))
+const MakeDeductions = lazy(() => import("../../pages/secretariat/deductions/MakeDeductions"))
+const Settings = lazy(() => import("../../pages/administration/settings/Settings"))
+const Config = lazy(() => import("../../pages/administration/config/Configuration"))
 
 export const routes = {
   guest: [
@@ -126,6 +132,16 @@ export const routes = {
       url: "/secretariat",
     },
     {
+      name: "Settings",
+      element: <Settings />,
+      url: "/administration/settings",
+    },
+    {
+      name: "Site Configuration",
+      element: <Config />,
+      url: "/administration/config",
+    },
+    {
       name: "Registered Loans",
       element: <RegisteredLoans />,
       url: "/secretariat/registered-loans",
@@ -139,6 +155,16 @@ export const routes = {
       name: "Accounts",
       element: <Accounts />,
       url: "/secretariat/accounts",
+    },
+    {
+      name: "Liquidation Request",
+      element: <Liquidations />,
+      url: "/secretariat/liquidation/requests",
+    },
+    {
+      name: "Liquidation Loan",
+      element: <LiquidateLoan />,
+      url: "/secretariat/liquidate/loan",
     },
     {
       name: "Apply Loan",
@@ -159,6 +185,11 @@ export const routes = {
       name: "Batch Payments",
       element: <Batch />,
       url: "/secretariat/batches",
+    },
+    {
+      name: "Make Deductions",
+      element: <MakeDeductions />,
+      url: "/secretariat/make/deductions",
     },
     {
       name: "Payments",

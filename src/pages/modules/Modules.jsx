@@ -6,6 +6,7 @@ import CreateModule from "./CreateModule";
 import axios from "axios";
 import { formatSelectOptions } from "../../app/helpers";
 import Alert from "../../app/services/alert";
+import ExportCsv from "../../components/ExportCsv";
 
 const Modules = () => {
   const [modules, setModules] = useState([]);
@@ -41,6 +42,15 @@ const Modules = () => {
       header: "Type",
       isSortable: true,
     },
+  ];
+
+  const headers = [
+    { label: "name", key: "name" },
+    { label: "code", key: "code" },
+    { label: "icon", key: "icon" },
+    { label: "parent", key: "parent" },
+    { label: "type", key: "type" },
+    { label: "url", key: "url" },
   ];
 
   const manageModule = (mod) => {
@@ -98,7 +108,7 @@ const Modules = () => {
     }
   }, []);
 
-  // console.log(modules);
+  console.log(modules);
 
   const addModule = () => {
     // console.log("added");
@@ -119,6 +129,13 @@ const Modules = () => {
 
       <div className="data__content">
         <div className="row">
+          <div className="col-md-2">
+            <ExportCsv
+              headers={headers}
+              data={modules}
+              filename="modules-download"
+            />
+          </div>
           {show ? (
             <CreateModule
               options={modules}

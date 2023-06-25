@@ -54,9 +54,7 @@ const Liquidate = () => {
   ];
 
   const manageLiquidation = (liq) => {
-    setData(liq);
-    setIsUpdating(true);
-    setShow(true);
+    //
   };
 
   const openModal = () => {

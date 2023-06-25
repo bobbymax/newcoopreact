@@ -6,8 +6,8 @@ const options = {
 };
 
 export const login = async (data) => {
-  const { email, password } = data;
-  return await axios.post(`${api.url}login`, { email, password });
+  const { email, password, device } = data;
+  return await axios.post(`${api.url}login`, { email, password, device });
 };
 
 export const logout = async () => {
