@@ -1446,3 +1446,50 @@ span.open {
   color: var(--color-white);
   background-color: var(--color-primary-variant);
 }
+
+.home__wrapper {
+  background-color: var(--color-background);
+  background-image: url("../../assets/images/bg.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.home__content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.login__bttn {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background-color: var(--color-darker);
+  color: var(--color-white);
+  padding: var(--padding-2);
+  display: flex;
+  gap: 0.56rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  border-radius: var(--card-border-radius);
+}
+
+.login__bttn:hover {
+  background-color: var(--color-dark);
+  color: var(--color-white);
+}
+
+.home__content h1 {
+  display: flex;
+  gap: 0.88rem;
+  align-items: center;
+  font-size: 3rem;
+}
+
+.home__content h1 > img {
+  width: 25%;
+}

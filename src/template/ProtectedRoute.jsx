@@ -19,7 +19,7 @@ const ProtectedRoute = ({ children }) => {
       logout()
         .then((res) => {
           dispatch(disembark());
-          navigate("/");
+          navigate("/auth/login");
           console.log(res.data);
         })
         .catch((e) => console.log(e.message));

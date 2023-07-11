@@ -52,9 +52,7 @@ const BudgetHeads = () => {
     }
 
     Alert.success(response?.status, response?.message);
-    setIsUpdating(false);
-    setShow(false);
-    setData(undefined);
+    handleClose();
   };
 
   const handleClose = () => {
