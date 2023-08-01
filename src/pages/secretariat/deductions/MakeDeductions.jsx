@@ -89,7 +89,7 @@ const MakeDeductions = () => {
             const ins = res[3].data.data;
 
             setOwner(own);
-            setAccounts(own?.accounts);
+            setAccounts(own?.accounts ?? []);
             setSubBudgetHeads(subs);
             setCharts(chars);
             setInstallments(ins);

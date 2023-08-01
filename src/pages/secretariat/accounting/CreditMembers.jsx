@@ -162,7 +162,7 @@ const CreditMembers = () => {
             const chars = res[2].data.data;
 
             setOwner(own);
-            setAccounts(own?.accounts);
+            setAccounts(own?.accounts ?? []);
             setSubBudgetHeads(subs);
             setCharts(chars);
           })
