@@ -8,6 +8,8 @@ import { currency } from "../../app/helpers";
 const Sidebar = () => {
   const { auth, wallet } = useStateContext();
 
+  console.log(auth);
+
   return (
     <aside>
       <div className="logo">
@@ -20,6 +22,9 @@ const Sidebar = () => {
         <div className="member__info">
           <h3>{`${auth?.firstname} ${auth?.surname}`}</h3>
           <p>{currency(wallet?.savings)}</p>
+          <small>
+            savings as at <span>may</span>
+          </small>
         </div>
       </div>
       <div className="navigation">

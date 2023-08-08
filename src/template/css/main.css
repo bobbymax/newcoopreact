@@ -578,6 +578,18 @@ span.open {
   color: var(--color-border);
 }
 
+.member__info small {
+  text-transform: uppercase;
+  color: var(--color-form-input);
+  font-weight: 700;
+  letter-spacing: 2px;
+  display: block;
+  margin-top: 10px;
+}
+.member__info small > span {
+  color: var(--color-primary);
+}
+
 .view__action__btn {
   background-color: var(--color-dark);
 }
