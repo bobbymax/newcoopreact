@@ -8,7 +8,7 @@ import { currency } from "../../app/helpers";
 const Sidebar = () => {
   const { auth, wallet } = useStateContext();
 
-  console.log(auth);
+  // console.log(auth);
 
   return (
     <aside>

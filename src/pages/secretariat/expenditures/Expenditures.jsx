@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PageHeader from "../../../template/includes/PageHeader";
-import {
-  batchRequests,
-  collection,
-  destroy,
-} from "../../../app/http/controllers";
-import axios from "axios";
+import { collection, destroy } from "../../../app/http/controllers";
 import {
   expenditureTypes,
   expenditureCategories,
@@ -131,23 +126,25 @@ const Expenditures = () => {
 
   useEffect(() => {
     try {
-      const expsData = collection("expenditures");
-      const subsData = collection("subBudgetHeads");
-      const memsData = collection("members");
-      const vendorsData = collection("organizations");
+      const urls = [
+        "expenditures",
+        "subBudgetHeads",
+        "members",
+        "organizations",
+      ];
 
-      batchRequests([expsData, subsData, memsData, vendorsData])
-        .then(
-          axios.spread((...res) => {
-            setExpenditures(res[0].data.data);
-            setSubBudgetHeads(res[1].data.data);
-            setMembers(res[2].data.data);
-            setVendors(res[3].data.data);
-          })
-        )
-        .catch((err) => console.log(err.message));
+      const requests = urls.map((url) => collection(url));
+
+      Promise.all(requests)
+        .then((res) => {
+          setExpenditures(res[0].data.data);
+          setSubBudgetHeads(res[1].data.data);
+          setMembers(res[2].data.data);
+          setVendors(res[3].data.data);
+        })
+        .catch((err) => console.error(err.message));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }, []);
 

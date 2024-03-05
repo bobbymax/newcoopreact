@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import PageHeader from "../template/includes/PageHeader";
 import { formatCompactNumber } from "../app/helpers";
-import Pie from "./charts/Pie";
 import DashboardCards from "../components/DashboardCards";
 import { useStateContext } from "../context/ContextProvider";
-import { batchRequests, collection } from "../app/http/controllers";
+import { collection } from "../app/http/controllers";
 import moment from "moment";
-import axios from "axios";
 
 const Dashboard = () => {
   const { auth } = useStateContext();
@@ -88,22 +86,22 @@ const Dashboard = () => {
       setRoles(roles);
 
       try {
-        const transactionData = collection("member/transactions");
-        const dashboardData = collection("dashboard/cards");
+        const urls = ["member/transactions", "dashboard/cards"];
 
-        batchRequests([transactionData, dashboardData])
-          .then(
-            axios.spread((...res) => {
-              const transactions = res[0].data.data;
-              const dashboards = res[1].data.data;
+        const requests = urls.map((url) => collection(url));
 
-              setTransactions(transactions);
-              setDashCards(dashboards);
-            })
-          )
-          .catch((err) => console.log(err.message));
+        Promise.all(requests)
+          .then((res) => {
+            const transactions = res[0].data.data;
+            const dashboards = res[1].data.data;
+            setTransactions(transactions);
+            setDashCards(dashboards);
+
+            // console.log(rles);
+          })
+          .catch((err) => console.error(err.message));
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }
   }, [auth]);

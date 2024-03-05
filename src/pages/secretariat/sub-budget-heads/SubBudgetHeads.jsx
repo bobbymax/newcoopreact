@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Alert from "../../../app/services/alert";
-import { batchRequests, collection } from "../../../app/http/controllers";
+import { collection } from "../../../app/http/controllers";
 import TableComponent from "../../../template/components/TableComponent";
 import PageHeader from "../../../template/includes/PageHeader";
 import CreateSubBudgetHead from "./CreateSubBudgetHead";
-import axios from "axios";
 
 const SubBudgetHeads = () => {
   const [subBudgetHeads, setSubBudgetHeads] = useState([]);
@@ -101,23 +100,19 @@ const SubBudgetHeads = () => {
 
   useEffect(() => {
     try {
-      const subsData = collection("subBudgetHeads");
-      const budsData = collection("budgetHeads");
-      const catsData = collection("categories");
+      const urls = ["subBudgetHeads", "budgetHeads", "categories"];
 
-      batchRequests([subsData, budsData, catsData])
-        .then(
-          axios.spread((...res) => {
-            setSubBudgetHeads(res[0].data.data);
-            setBudgetHeads(res[1].data.data);
-            setCategories(res[2].data.data);
-          })
-        )
-        .catch((err) => {
-          console.log(err.message);
-        });
+      const requests = urls.map((url) => collection(url));
+
+      Promise.all(requests)
+        .then((res) => {
+          setSubBudgetHeads(res[0].data.data);
+          setBudgetHeads(res[1].data.data);
+          setCategories(res[2].data.data);
+        })
+        .catch((err) => console.error(err.message));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }, []);
 

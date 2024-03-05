@@ -29,6 +29,8 @@ export const ContextProvider = ({ children }) => {
         collection("modules")
           .then((res) => {
             const response = res.data.data;
+
+            // console.log(response);
             const accessible = response?.filter((mod) =>
               mod?.roles?.some((rle) => roles?.includes(rle))
             );

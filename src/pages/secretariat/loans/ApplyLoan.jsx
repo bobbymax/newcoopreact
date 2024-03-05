@@ -3,17 +3,12 @@ import React, { useEffect, useState } from "react";
 import PageHeader from "../../../template/includes/PageHeader";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
-import {
-  batchRequests,
-  collection,
-  store,
-} from "../../../app/http/controllers";
+import { collection, store } from "../../../app/http/controllers";
 import {
   currency,
   formatSelectOptions,
   generateUniqueString,
 } from "../../../app/helpers";
-import axios from "axios";
 import {
   Button,
   CustomSelect,
@@ -201,27 +196,26 @@ const ApplyLoan = () => {
 
   useEffect(() => {
     try {
-      const membersData = collection("members");
-      const subsData = collection("subBudgetHeads");
+      const urls = ["members", "subBudgetHeads"];
 
-      batchRequests([membersData, subsData])
-        .then(
-          axios.spread((...res) => {
-            const response = res[0].data.data;
-            const filtered = response.filter(
-              (member) => member?.type !== "admin"
-            );
-            const subs = res[1].data.data;
-            const funded = subs.filter(
-              (sub) => sub?.fund && sub?.feature !== null
-            );
-            setMembers(formatSelectOptions(filtered, "id", "name"));
-            setSubBudgetHeads(formatSelectOptions(funded, "id", "name"));
-          })
-        )
-        .catch((err) => console.log(err.message));
+      const requests = urls.map((url) => collection(url));
+
+      Promise.all(requests)
+        .then((res) => {
+          const response = res[0].data.data;
+          const filtered = response.filter(
+            (member) => member?.type !== "admin"
+          );
+          const subs = res[1].data.data;
+          const funded = subs.filter(
+            (sub) => sub?.fund && sub?.feature !== null
+          );
+          setMembers(formatSelectOptions(filtered, "id", "name"));
+          setSubBudgetHeads(formatSelectOptions(funded, "id", "name"));
+        })
+        .catch((err) => console.error(err.message));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }, []);
 

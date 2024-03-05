@@ -41,6 +41,8 @@ const AddMember = ({
       ...state,
     };
 
+    // console.log(requests);
+
     try {
       setLoading(true);
       if (isUpdating) {
@@ -102,12 +104,14 @@ const AddMember = ({
         middlename: data?.middlename,
         surname: data?.surname,
         mobile: data?.mobile,
-        contribution_fee: parseFloat(data?.contribution_fee),
+        contribution_fee: parseFloat(data?.contribution_fee) ?? 0,
         type: data?.type,
         email: data?.email,
       });
     }
   }, [data]);
+
+  // console.log(state);
 
   return (
     <>

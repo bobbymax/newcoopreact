@@ -1,13 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { useStateContext } from "../../../context/ContextProvider";
-import {
-  alter,
-  batchRequests,
-  collection,
-  store,
-} from "../../../app/http/controllers";
-import axios from "axios";
+import { alter, collection, store } from "../../../app/http/controllers";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import {
@@ -147,28 +141,27 @@ const AwardContract = ({
 
   useEffect(() => {
     try {
-      const projectsData = collection("projects");
-      const vendorsData = collection("organizations");
+      const urls = ["projects", "organizations"];
 
-      batchRequests([projectsData, vendorsData])
-        .then(
-          axios.spread((...res) => {
-            const projs = res[0].data.data;
-            const vens = res[1].data.data;
+      const requests = urls.map((url) => collection(url));
 
-            const removeSelf = vens.filter((ven) => ven?.type !== "self");
+      Promise.all(requests)
+        .then((res) => {
+          const projs = res[0].data.data;
+          const vens = res[1].data.data;
 
-            setVendors(formatSelectOptions(removeSelf, "id", "name"));
-            setProjects(formatSelectOptions(projs, "id", "title"));
-            setState({
-              ...state,
-              code: !isUpdating ? generateUniqueString("CTR", 6) : state.code,
-            });
-          })
-        )
-        .catch((err) => console.log(err.message));
+          const removeSelf = vens.filter((ven) => ven?.type !== "self");
+
+          setVendors(formatSelectOptions(removeSelf, "id", "name"));
+          setProjects(formatSelectOptions(projs, "id", "title"));
+          setState({
+            ...state,
+            code: !isUpdating ? generateUniqueString("CTR", 6) : state.code,
+          });
+        })
+        .catch((err) => console.error(err.message));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }, []);
 

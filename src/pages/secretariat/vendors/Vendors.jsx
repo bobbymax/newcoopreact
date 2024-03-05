@@ -90,6 +90,10 @@ const Vendors = () => {
     setIsLoading(false);
   };
 
+  const handleAddAccount = (raw) => {
+    console.log(raw);
+  };
+
   useEffect(() => {
     try {
       collection("organizations")
@@ -132,6 +136,7 @@ const Vendors = () => {
             data={vendors}
             manage
             manageData={manageVendor}
+            account={handleAddAccount}
             isSearchable
           />
         </div>

@@ -6,6 +6,7 @@ import AddMember from "./AddMember";
 import Alert from "../../../app/services/alert";
 import { alter } from "../../../app/http/controllers";
 import AddRoleToMember from "./AddRoleToMember";
+import ResetPassword from "./ResetPassword";
 
 const AddOrUpdateMember = () => {
   const { state } = useLocation();
@@ -17,6 +18,7 @@ const AddOrUpdateMember = () => {
   const [wallet, setWallet] = useState(null);
   const [show, setShow] = useState(false);
   const [showRole, setShowRole] = useState(false);
+  const [showPass, setShowPass] = useState(false);
 
   const handleSubmit = (response) => {
     setMember(response.data);
@@ -31,6 +33,7 @@ const AddOrUpdateMember = () => {
   const handleClose = () => {
     setShow(false);
     setShowRole(false);
+    setShowPass(false);
   };
 
   // Disable or Reactivate an Account
@@ -125,6 +128,14 @@ const AddOrUpdateMember = () => {
         data={member}
       />
 
+      <ResetPassword
+        title="Reset Password"
+        show={showPass}
+        handleClose={handleClose}
+        handleSubmit={handleSubmit}
+        data={member}
+      />
+
       <PageHeader pageName="Manage Account" />
 
       <div className="manage__account">
@@ -184,7 +195,7 @@ const AddOrUpdateMember = () => {
                 <button
                   type="button"
                   className="member__bttn__actions bg__danger"
-                  onClick={() => setShowRole(true)}
+                  onClick={() => setShowPass(true)}
                 >
                   <span className="material-icons-sharp">refresh</span>
                   <p>Reset Password</p>

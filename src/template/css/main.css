@@ -311,7 +311,7 @@ aside .navigation p.pointer {
 /* Navigation styling */
 .nav__link {
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   gap: 0.52rem;
   margin-bottom: 2rem;
 }

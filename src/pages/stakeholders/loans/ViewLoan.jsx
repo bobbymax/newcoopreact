@@ -109,7 +109,10 @@ const ViewLoan = () => {
   const makeLoanDecision = (decision) => {
     const requests = {
       status: decision,
+      approved_amount: details.requested_amount,
     };
+
+    console.log(requests);
 
     try {
       alter("respond/loans", details.id, requests)
@@ -510,7 +513,7 @@ const ViewLoan = () => {
                   <button
                     type="button"
                     className="side__button bg__secondary"
-                    disabled={isUpdating || details.approved_amount > 0}
+                    // disabled={isUpdating || details.approved_amount > 0}
                     onClick={() => setIsUpdating(true)}
                   >
                     Manage Loan Request

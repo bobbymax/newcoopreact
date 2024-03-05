@@ -9,13 +9,7 @@ import * as XLSX from "xlsx";
 import { convertToJson, getExtension } from "../../../app/helpers";
 import TableComponent from "../../../template/components/TableComponent";
 import { formatCompactNumber } from "../../../app/helpers";
-import {
-  batchRequests,
-  collection,
-  fetch,
-  store,
-} from "../../../app/http/controllers";
-import axios from "axios";
+import { collection, fetch, store } from "../../../app/http/controllers";
 import Alert from "../../../app/services/alert";
 
 const CreditMembers = () => {
@@ -150,26 +144,24 @@ const CreditMembers = () => {
 
   useEffect(() => {
     try {
-      const owner = collection("retrieve/owner");
-      const subsData = collection("subBudgetHeads");
-      const chartsData = collection("chartOfAccounts");
+      const urls = ["retrieve/owner", "subBudgetHeads", "chartOfAccounts"];
 
-      batchRequests([owner, subsData, chartsData])
-        .then(
-          axios.spread((...res) => {
-            const own = res[0].data.data;
-            const subs = res[1].data.data;
-            const chars = res[2].data.data;
+      const requests = urls.map((url) => collection(url));
 
-            setOwner(own);
-            setAccounts(own?.accounts ?? []);
-            setSubBudgetHeads(subs);
-            setCharts(chars);
-          })
-        )
-        .catch((err) => console.log(err.message));
+      Promise.all(requests)
+        .then((res) => {
+          const own = res[0].data.data;
+          const subs = res[1].data.data;
+          const chars = res[2].data.data;
+
+          setOwner(own);
+          setAccounts(own?.accounts ?? []);
+          setSubBudgetHeads(subs);
+          setCharts(chars);
+        })
+        .catch((err) => console.error(err.message));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }, []);
 

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import PageHeader from "../../template/includes/PageHeader";
-import { batchRequests, collection } from "../../app/http/controllers";
+import { collection } from "../../app/http/controllers";
 import TableComponent from "../../template/components/TableComponent";
 import CreateModule from "./CreateModule";
-import axios from "axios";
 import { formatSelectOptions } from "../../app/helpers";
 import Alert from "../../app/services/alert";
 import ExportCsv from "../../components/ExportCsv";
@@ -90,25 +89,26 @@ const Modules = () => {
 
   useEffect(() => {
     try {
-      const rolesData = collection("roles");
-      const modulesData = collection("modules");
+      const urls = ["roles", "modules"];
 
-      batchRequests([rolesData, modulesData])
-        .then(
-          axios.spread((...res) => {
-            const rles = res[0].data.data;
-            const mds = res[1].data.data;
-            setRoles(formatSelectOptions(rles, "id", "name", "label"));
-            setModules(mds);
-          })
-        )
-        .catch((err) => console.log(err.message));
+      const requests = urls.map((url) => collection(url));
+
+      Promise.all(requests)
+        .then((res) => {
+          const rles = res[0].data.data;
+          const mds = res[1].data.data;
+          setRoles(formatSelectOptions(rles, "id", "name", "label"));
+          setModules(mds);
+
+          // console.log(rles);
+        })
+        .catch((err) => console.error(err.message));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }, []);
 
-  console.log(modules);
+  // console.log(modules);
 
   const addModule = () => {
     // console.log("added");

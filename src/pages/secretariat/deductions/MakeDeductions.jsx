@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PageHeader from "../../../template/includes/PageHeader";
-import { batchRequests, collection } from "../../../app/http/controllers";
-import axios from "axios";
+import { collection } from "../../../app/http/controllers";
 import TableComponent from "../../../template/components/TableComponent";
 import {
   CustomSelect,
@@ -74,34 +73,32 @@ const MakeDeductions = () => {
 
   useEffect(() => {
     try {
-      const ownerData = collection("retrieve/owner");
-      const subsData = collection("subBudgetHeads");
-      const chartsData = collection("chartOfAccounts");
-      const installmentsData = collection("installments");
-      setIsLoading(true);
+      const urls = [
+        "retrieve/owner",
+        "subBudgetHeads",
+        "chartOfAccounts",
+        "installments",
+      ];
+      // setIsLoading(true);
+      const requests = urls.map((url) => collection(url));
 
-      batchRequests([ownerData, subsData, chartsData, installmentsData])
-        .then(
-          axios.spread((...res) => {
-            const own = res[0].data.data;
-            const subs = res[1].data.data;
-            const chars = res[2].data.data;
-            const ins = res[3].data.data;
+      Promise.all(requests)
+        .then((res) => {
+          const own = res[0].data.data;
+          const subs = res[1].data.data;
+          const chars = res[2].data.data;
+          const ins = res[3].data.data;
 
-            setOwner(own);
-            setAccounts(own?.accounts ?? []);
-            setSubBudgetHeads(subs);
-            setCharts(chars);
-            setInstallments(ins);
-            setIsLoading(false);
-          })
-        )
-        .catch((err) => {
-          console.log(err.message);
+          setOwner(own);
+          setAccounts(own?.accounts ?? []);
+          setSubBudgetHeads(subs);
+          setCharts(chars);
+          setInstallments(ins);
           setIsLoading(false);
-        });
+        })
+        .catch((err) => console.error(err.message));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }, []);
 

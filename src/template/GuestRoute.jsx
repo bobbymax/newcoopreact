@@ -1,5 +1,4 @@
 import React from "react";
-import logo from "../assets/images/logos/logo.png";
 // import bg from "../assets/images/bg.png";
 
 const GuestRoute = ({ children }) => {

@@ -7,13 +7,7 @@ import {
   CustomSelectOptions,
   TextInput,
 } from "../../../../template/components/Inputs";
-import {
-  batchRequests,
-  collection,
-  fetch,
-  store,
-} from "../../../../app/http/controllers";
-import axios from "axios";
+import { collection, fetch, store } from "../../../../app/http/controllers";
 import Alert from "../../../../app/services/alert";
 
 const Journals = () => {
@@ -45,7 +39,7 @@ const Journals = () => {
       fetch("fetch/expenditures", code)
         .then((res) => {
           const response = res.data.data;
-
+          // console.log(response);
           if (response?.journal) {
             setError("This transaction has been posted allready");
           } else {
@@ -58,6 +52,8 @@ const Journals = () => {
       console.log(error);
     }
   };
+
+  console.log(expenditure, organization);
 
   const stage = (obj) => {
     const { expType, org, ben } = obj;
@@ -138,8 +134,7 @@ const Journals = () => {
       expenditure !== null &&
       expenditure?.attributes &&
       expenditure?.attributes?.beneficiary &&
-      organization !== null &&
-      organization?.accounts?.length > 0
+      organization !== null
     ) {
       const { beneficiary } = expenditure?.attributes;
       const { accounts } = organization;
@@ -172,19 +167,18 @@ const Journals = () => {
 
   useEffect(() => {
     try {
-      const chartsData = collection("chartOfAccounts");
-      const org = collection("retrieve/owner");
+      const urls = ["chartOfAccounts", "retrieve/owner"];
 
-      batchRequests([chartsData, org])
-        .then(
-          axios.spread((...res) => {
-            setCharts(res[0].data.data);
-            setOrganization(res[1].data.data);
-          })
-        )
-        .catch((err) => console.log(err.message));
+      const requests = urls.map((url) => collection(url));
+
+      Promise.all(requests)
+        .then((res) => {
+          setCharts(res[0].data.data);
+          setOrganization(res[1].data.data);
+        })
+        .catch((err) => console.error(err.message));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }, []);
 

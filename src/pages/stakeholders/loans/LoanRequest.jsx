@@ -209,6 +209,8 @@ const LoanRequest = ({
     }
   }, [feature, state.requested_amount]);
 
+  console.log(feature);
+
   useEffect(() => {
     if (feature !== null && state.preferred_tenor > 0) {
       const varR = getVariant(feature, state.preferred_tenor);

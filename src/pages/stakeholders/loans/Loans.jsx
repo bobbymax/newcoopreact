@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Alert from "../../../app/services/alert";
-import { batchRequests, collection } from "../../../app/http/controllers";
+import { collection } from "../../../app/http/controllers";
 import TableComponent from "../../../template/components/TableComponent";
 import PageHeader from "../../../template/includes/PageHeader";
 import { formatSelectOptions } from "../../../app/helpers";
@@ -127,29 +126,25 @@ const Loans = () => {
 
   useEffect(() => {
     try {
-      const loansData = collection("loans");
-      const subBudgetHeadsData = collection("subBudgetHeads");
-      const membersData = collection("members");
+      const urls = ["loans", "subBudgetHeads", "members"];
 
-      batchRequests([loansData, subBudgetHeadsData, membersData])
-        .then(
-          axios.spread((...res) => {
-            const lns = res[0].data.data;
-            const subs = res[1].data.data;
-            const mems = res[2].data.data;
+      const requests = urls.map((url) => collection(url));
 
-            setMembers(
-              formatSelectOptions(mems, "id", "name", "membership_no")
-            );
-            setLoans(lns);
-            setSubBudgetHeads(
-              subs?.filter((sub) => sub?.category_label === "loan")
-            );
-          })
-        )
-        .catch((err) => console.log(err.message));
+      Promise.all(requests)
+        .then((res) => {
+          const lns = res[0].data.data;
+          const subs = res[1].data.data;
+          const mems = res[2].data.data;
+
+          setMembers(formatSelectOptions(mems, "id", "name", "membership_no"));
+          setLoans(lns);
+          setSubBudgetHeads(
+            subs?.filter((sub) => sub?.category_label === "loan")
+          );
+        })
+        .catch((err) => console.error(err.message));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }, []);
 

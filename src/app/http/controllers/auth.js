@@ -1,15 +1,11 @@
-import { api, header } from "../../services";
-import axios from "axios";
+import api, { guest } from "../../services";
 
-const options = {
-  headers: header(),
-};
 
 export const login = async (data) => {
   const { email, password, device } = data;
-  return await axios.post(`${api.url}login`, { email, password, device });
+  return await guest.post('login', { email, password, device });
 };
 
 export const logout = async () => {
-  return await axios.post(`${api.url}logout`, {}, options);
+  return await api.post('logout', {});
 };

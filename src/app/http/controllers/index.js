@@ -1,45 +1,85 @@
-import { api, header } from "../../services";
-import axios from "axios";
+import api from "../../services";
 
-const options = {
-  headers: header(),
-};
 
-export const collection = async (entity) =>
-  await axios.get(`${api.url + entity}`, options);
+export const collection = async (entity) => {
+    try {
+      const response = await api.get(entity)
+      return response
+    } catch (error) {
+      console.error(error);
+    }
+}
 
 export const bulk = async (entity, body) => {
-  return await axios.post(`${api.url + entity}`, body, options);
+  try {
+    const response = await api.post(entity, body)
+    return response
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const fetch = async (entity, id) => {
-  return await axios.get(`${api.url + entity}/${id}`, options);
+  try {
+    const response = await api.get(`${entity}/${id}`)
+    return response
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const store = async (entity, body) => {
-  return await axios.post(`${api.url + entity}`, body, options);
+
+  try {
+    const response = await api.post(entity, body)
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const alter = async (entity, id, body) => {
-  return await axios.patch(`${api.url + entity}/${id}`, body, options);
+  try {
+    const response = await api.patch(`${entity}/${id}`, body)
+    return Promise.resolve(response);
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const destroy = async (entity, id) => {
-  return await axios.delete(`${api.url + entity}/${id}`, options);
+  try {
+    const response = await api.delete(`${entity}/${id}`)
+    return response
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const batchRequests = async (...arrRequests) => {
-  const result = await axios.all(...arrRequests);
-  return Promise.resolve(result);
+
+  try {
+    const response = await Promise.all(arrRequests)
+    return response
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const printBatch = async (entity, id, body) => {
-  return await axios.post(`${api.url + entity}/${id}`, body, options);
+  try {
+    const response = await api.post(`${entity}/${id}`, body)
+    return response
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const getPrinted = async (entity, id) => {
-  return await axios.get(`${api.url + entity}/${id}`, {
-    responseType: "blob",
-    headers: header(),
-  });
+  try {
+    const response = api.get(`${entity}/${id}`, {responseType: "blob"})
+    return response
+  } catch (error) {
+    console.error(error);
+  }
 };

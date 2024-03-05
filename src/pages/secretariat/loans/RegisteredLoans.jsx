@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PageHeader from "../../../template/includes/PageHeader";
-import { batchRequests, collection } from "../../../app/http/controllers";
+import { collection } from "../../../app/http/controllers";
 import TableComponent from "../../../template/components/TableComponent";
-import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const RegisteredLoans = () => {
@@ -67,21 +66,21 @@ const RegisteredLoans = () => {
 
   useEffect(() => {
     try {
-      const membersData = collection("members");
-      const registeredLoans = collection("registered/loans");
-      batchRequests([membersData, registeredLoans])
-        .then(
-          axios.spread((...res) => {
-            const mems = res[0].data.data;
-            const regs = res[1].data.data;
+      const urls = ["members", "registered/loans"];
 
-            setMembers(mems.filter((mem) => mem?.type === "member"));
-            setLoans(regs);
-          })
-        )
-        .catch((err) => console.log(err.message));
+      const requests = urls.map((url) => collection(url));
+
+      Promise.all(requests)
+        .then((res) => {
+          const mems = res[0].data.data;
+          const regs = res[1].data.data;
+
+          setMembers(mems.filter((mem) => mem?.type === "member"));
+          setLoans(regs);
+        })
+        .catch((err) => console.error(err.message));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }, []);
 

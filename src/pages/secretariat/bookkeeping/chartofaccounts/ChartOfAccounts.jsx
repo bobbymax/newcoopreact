@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Alert from "../../../../app/services/alert";
-import { batchRequests, collection } from "../../../../app/http/controllers";
+import { collection } from "../../../../app/http/controllers";
 import PageHeader from "../../../../template/includes/PageHeader";
 import TableComponent from "../../../../template/components/TableComponent";
 import AddChartOfAccount from "./AddChartOfAccount";
-import axios from "axios";
 
 const ChartOfAccounts = () => {
   const [charts, setCharts] = useState([]);
@@ -66,21 +65,18 @@ const ChartOfAccounts = () => {
 
   useEffect(() => {
     try {
-      const codesData = collection("accountCodes");
-      const chartsData = collection("chartOfAccounts");
+      const urls = ["accountCodes", "chartOfAccounts"];
 
-      batchRequests([codesData, chartsData])
-        .then(
-          axios.spread((...res) => {
-            setCodes(res[0].data.data);
-            setCharts(res[1].data.data);
-          })
-        )
-        .catch((err) => {
-          console.log(err.message);
-        });
+      const requests = urls.map((url) => collection(url));
+
+      Promise.all(requests)
+        .then((res) => {
+          setCodes(res[0].data.data);
+          setCharts(res[1].data.data);
+        })
+        .catch((err) => console.error(err.message));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }, []);
 

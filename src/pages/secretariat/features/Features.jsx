@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Alert from "../../../app/services/alert";
-import { batchRequests, collection } from "../../../app/http/controllers";
+import { collection } from "../../../app/http/controllers";
 import TableComponent from "../../../template/components/TableComponent";
 import PageHeader from "../../../template/includes/PageHeader";
 import AddFeatures from "./AddFeatures";
-import axios from "axios";
 
 const Features = () => {
   const [subBudgetHeads, setSubBudgetHeads] = useState([]);
@@ -101,22 +100,19 @@ const Features = () => {
 
   useEffect(() => {
     try {
-      const subsData = collection("subBudgetHeads");
-      const featuresData = collection("features");
+      const urls = ["subBudgetHeads", "features"];
 
-      batchRequests([subsData, featuresData])
-        .then(
-          axios.spread((...res) => {
-            const response = res[0].data.data;
-            setSubBudgetHeads(response?.filter((sub) => sub?.feature === null));
-            setFeatures(res[1].data.data);
-          })
-        )
-        .catch((err) => {
-          console.log(err.message);
-        });
+      const requests = urls.map((url) => collection(url));
+
+      Promise.all(requests)
+        .then((res) => {
+          const response = res[0].data.data;
+          setSubBudgetHeads(response?.filter((sub) => sub?.feature === null));
+          setFeatures(res[1].data.data);
+        })
+        .catch((err) => console.error(err.message));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }, []);
 

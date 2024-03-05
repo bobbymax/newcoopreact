@@ -22,6 +22,7 @@ const TableComponent = ({
   destroy = undefined,
   postPayment = undefined,
   deposit = undefined,
+  account = undefined,
 }) => {
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -72,6 +73,18 @@ const TableComponent = ({
         disabled={!raw?.canBeReversed || raw?.status !== "pending"}
       >
         <span className="material-icons-sharp">history</span>
+      </button>
+    );
+  };
+
+  const addAccountTemplate = (raw) => {
+    return (
+      <button
+        type="button"
+        className="table__print__btn bg__danger"
+        onClick={() => account(raw)}
+      >
+        <span className="material-icons-sharp">wallet</span>
       </button>
     );
   };
@@ -355,6 +368,7 @@ const TableComponent = ({
           {postPayment !== undefined && <Column body={postPaymentTemplate} />}
           {deposit !== undefined && <Column body={approveBodyTemplate} />}
           {deposit !== undefined && <Column body={declinedBodyTemplate} />}
+          {account !== undefined && <Column body={addAccountTemplate} />}
         </DataTable>
       </div>
     </div>
